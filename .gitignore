@@ -1,0 +1,10 @@
+*.xml
+*.iml
+.idea/*
+.DS*
+CMake*
+cmake*
+*.zip
+*.o
+\bin
+log/*

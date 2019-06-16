@@ -1,0 +1,212 @@
+syntax = "proto2";
+package IM;
+
+
+//********************************Client Request **********************************
+
+//登录
+message Login
+{
+  optional string username = 1;
+  optional string password = 2;
+  optional int64  timestamp = 3;
+}
+
+//注册
+message Register
+{
+  optional string username = 1;
+  optional string password = 2;
+  optional string mobile = 3;
+  optional string nickname = 4;
+  optional int32 sex = 5;
+  optional int64  age = 6;
+  optional int64  timestamp = 7;
+  optional string sign_info = 8;
+  optional string email = 9;
+}
+
+//发送单聊消息
+message SingleChat
+{
+  optional string receiver = 1;
+  optional string sender = 2;
+  optional int32  type = 3;   // 0-文本消息 1-发红包请求  2-发红包响应  3-抢红包请求 4-抢红包响应
+  optional string message = 4;
+  optional Hongbaoreq hbreq = 5;
+  optional HongbaoResp hbrsp = 6;
+  optional ReqRobHongbao  robhbreq = 7;
+  optional RespRobHongbao  robhbrsp = 8;
+  optional int64  timestamp = 9;
+}
+
+//发红包请求
+message Hongbaoreq
+{
+    optional string  sender = 1;
+    optional double  money = 2;
+    optional int64   category = 3;
+    optional int64   count = 4;
+    optional string  receiver = 5;
+    optional int64   timestamp = 6;
+}
+
+
+//发送红包结果反馈
+message HongbaoResp
+{
+    optional string hongbaokey = 1;
+    optional string sender = 2;
+    optional bool isok = 3 [default = false];
+    optional string description = 4;
+}
+
+//抢红包请求
+message ReqRobHongbao
+{
+    optional string hongbaokey = 1;
+    optional string sender = 2;
+    optional string selfname = 3;
+}
+
+//抢红包结果反馈
+message RespRobHongbao
+{
+    optional string  hongbaokey = 1;
+    optional string sender = 2;
+    optional double robmoney = 3;
+    optional int64 totalcount = 4;
+    optional int64  leftcount = 5;
+    optional bool  isok = 6;
+    optional string description = 7;
+}
+
+//发送群聊消息
+message GroupChat
+{
+  optional string groupid = 1;
+  optional string sender = 2;
+  optional string message = 3;
+  optional int64  timestamp = 4;
+}
+
+//添加好友
+message AddFriend
+{
+    optional string receiver = 1;
+    optional string sender = 2;
+    optional string message = 3;
+    optional int64  timestamp = 4;
+}
+
+//请求获得好友信息
+message GetFriendInfo
+{
+    optional string sender = 1;
+    optional string friend = 2;
+    optional int64  timestamp = 3;
+}
+
+// **********************************Server Response*****************************************
+
+//好友信息
+message FriendInfo
+{
+  optional string mobile = 1;
+  optional string nickname = 2;
+  optional string sex = 3;
+  optional int64  age = 4;
+  optional int64  timestamp = 5;
+}
+
+//好友列表
+message FriendList
+{
+    repeated FriendInfo friendlist = 1;
+    optional int64  timestamp = 2;
+}
+
+//请求结果反馈
+message Response
+{
+   optional bool result = 1;
+   optional string description = 2;
+}
+
+
+//登录缓存数据 服务器专用
+message Session
+{
+    optional bool islogin = 1;
+    optional int64 hashkey = 2;
+    optional string ip = 3;
+    optional string redisname = 4;
+    optional UserInfo userinfo = 5;
+}
+
+//服务器专用
+message UserInfo
+{
+    optional int64  id = 1;
+    optional int32  sex = 2;
+    optional int32  age = 3;
+    optional string name = 4;
+    optional string nick = 5;
+    optional string phone = 6;
+    optional string email = 7;
+    optional int64  createtime = 8;
+    optional int64  updatetime = 9;
+    optional string sign_info = 10;
+    optional double  money = 11;
+}
+
+//服务器专用
+message SendHongbao
+{
+    optional string  sender = 1;
+    optional double money = 2;
+    optional double leftmoney = 3;
+    optional int64   category = 4;      //群发 私发
+    optional int64   count = 5;     //数量
+    optional int64   leftcount = 6;
+    optional string   receiver = 7;
+    repeated RobLog  robitem = 8;
+    optional int64   timestamp = 9;
+}
+
+//红包抢取人
+message RobLog
+{
+   optional string name = 1;
+   optional double money = 2;
+   optional int64  time = 3;
+}
+
+
+
+
+
+
+//****************************待优化*****************************
+//红包信息
+//message RedPacket
+//{
+//    optional double  money = 1;
+//    optional int64   count = 2;
+//    optional string description = 3;
+//    optional string hongbaokey = 4;
+//    optional int32  type = 5;       // 0-发  1-红包通知  2-抢
+//}
+//发送单聊消息
+//message SingleChat
+//{
+//  optional string receiver = 1;
+// optional string sender = 2;
+//  optional int32  type = 3;   // 0-文本消息 1-语音消息  2-图片  3-红包
+//  optional string message = 4;
+//  optional Hongbaoreq hb = 5;
+//  optional RespRobHongbao  robhb = 6;
+//  optional int64  timestamp = 7;
+//}
+//********************************************************************
+
